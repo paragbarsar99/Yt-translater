@@ -1,8 +1,8 @@
 import os
 from openai import OpenAI
 
-# Use gpt-4 for better quality summaries
-MODEL = "gpt-4"
+# Use gpt-3.5-turbo for better availability
+MODEL = "gpt-3.5-turbo"
 
 client = OpenAI(api_key=os.getenv('OPENAI_API_KEY'))
 
