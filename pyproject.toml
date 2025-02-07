@@ -1,0 +1,10 @@
+[project]
+name = "repl-nix-workspace"
+version = "0.1.0"
+description = "Add your description here"
+requires-python = ">=3.11"
+dependencies = [
+    "openai>=1.61.1",
+    "streamlit>=1.42.0",
+    "youtube-transcript-api>=0.6.3",
+]
