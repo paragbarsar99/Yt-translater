@@ -2,7 +2,7 @@ import type { Express } from "express";
 import { createServer } from "http";
 import { storage } from "./storage";
 import { youtubeUrlSchema, type InsertSummary } from "@shared/schema";
-import { extractVideoId, type VideoMetadata } from "@shared/youtube";
+import { extractVideoId, type VideoMetadata, fetchSubtitles } from "@shared/youtube";
 import { generateSummary } from "./openai";
 import youtubeDl from "youtube-dl-exec";
 
@@ -10,7 +10,7 @@ export function registerRoutes(app: Express) {
   app.post("/api/summarize", async (req, res) => {
     try {
       const { url } = await youtubeUrlSchema.parseAsync(req.body);
-      
+
       const videoId = extractVideoId(url);
       if (!videoId) {
         throw new Error("Invalid YouTube URL");
@@ -31,6 +31,9 @@ export function registerRoutes(app: Express) {
         youtubeSkipDashManifest: true,
       }) as any;
 
+      // Fetch subtitles
+      const subtitles = await fetchSubtitles(videoId);
+
       const videoMetadata: VideoMetadata = {
         videoId,
         videoUrl: url,
@@ -38,6 +41,7 @@ export function registerRoutes(app: Express) {
         thumbnail: metadata.thumbnail,
         duration: metadata.duration_string,
         description: metadata.description,
+        subtitles
       };
 
       // Generate summary

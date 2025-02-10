@@ -10,8 +10,15 @@ export async function generateSummary(video: VideoMetadata): Promise<string> {
     const prompt = `Please provide a comprehensive summary of this YouTube video.
 Title: ${video.title}
 Description: ${video.description}
+Subtitles: ${video.subtitles || 'Not available'}
 
-Please summarize the key points and main takeaways in a clear, concise manner. Format the response in paragraphs and use natural language.`;
+Please analyze the content and create a detailed summary with the following format:
+1. Main topic or theme (2-3 sentences)
+2. Key Points (in bullet points)
+3. Important highlights or timestamps (if available)
+4. Conclusion or main takeaways (in bullet points)
+
+Make sure to organize the information clearly and use bullet points where appropriate.`;
 
     const result = await model.generateContent(prompt);
     const response = await result.response;
