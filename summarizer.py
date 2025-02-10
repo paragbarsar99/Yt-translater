@@ -1,13 +1,14 @@
 import os
-from openai import OpenAI
+import anthropic
+from anthropic import Anthropic
 
-# Use gpt-3.5-turbo for better availability and reliability
-MODEL = "gpt-3.5-turbo"
+# Initialize Anthropic client
+client = Anthropic(api_key=os.getenv('ANTHROPIC_API_KEY'))
 
-client = OpenAI(api_key=os.getenv('OPENAI_API_KEY'))
+# the newest Anthropic model is "claude-3-5-sonnet-20241022" which was released October 22, 2024
 
 def generate_summary(transcript, length="Medium"):
-    """Generate a summary of the transcript using OpenAI."""
+    """Generate a summary of the transcript using Anthropic's Claude."""
 
     # Configure prompt based on desired length
     length_configs = {
@@ -28,17 +29,18 @@ def generate_summary(transcript, length="Medium"):
     """
 
     try:
-        response = client.chat.completions.create(
-            model=MODEL,
-            messages=[
-                {"role": "system", "content": "You are a skilled content summarizer."},
-                {"role": "user", "content": prompt}
-            ],
+        response = client.messages.create(
+            model="claude-3-5-sonnet-20241022",
             max_tokens=config['max_tokens'],
-            temperature=0.7
+            messages=[
+                {
+                    "role": "user",
+                    "content": prompt
+                }
+            ]
         )
 
-        summary = response.choices[0].message.content
+        summary = response.content[0].text
         return summary.strip()
 
     except Exception as e:
