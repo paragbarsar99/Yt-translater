@@ -1,6 +1,4 @@
-git clone [your-repo-url]
-cd youtube-video-summarizer
-```
+ ```
 
 2. Install the required packages:
 ```bash
