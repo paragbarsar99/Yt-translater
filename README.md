@@ -28,5 +28,4 @@ https://github.com/user-attachments/assets/73bb86c5-6e05-491f-9ccf-270d4ce1f6e9
 | **Frontend** | React.js, TailwindCSS |
 | **Backend**  | Node.js (Express.js) |
 | **AI Model** | OpenAI GPT/Gemini API |
-| **Database** | Firebase (optional for history storage) |
 | **Hosting**  | Replit / Vercel |
