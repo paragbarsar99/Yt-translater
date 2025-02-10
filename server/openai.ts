@@ -1,24 +1,23 @@
-import OpenAI from "openai";
+import { GoogleGenerativeAI } from "@google/generative-ai";
 import type { VideoMetadata } from "@shared/youtube";
 
-const openai = new OpenAI({
-  apiKey: process.env.OPENAI_API_KEY,
-  baseURL: "https://api.deepseek.com/v1",
-});
+const genAI = new GoogleGenerativeAI(process.env.GOOGLE_API_KEY || '');
 
 export async function generateSummary(video: VideoMetadata): Promise<string> {
-  const prompt = `Please provide a comprehensive summary of this YouTube video.
+  try {
+    const model = genAI.getGenerativeModel({ model: "gemini-1.5-flash" });
+
+    const prompt = `Please provide a comprehensive summary of this YouTube video.
 Title: ${video.title}
 Description: ${video.description}
 
 Please summarize the key points and main takeaways in a clear, concise manner. Format the response in paragraphs and use natural language.`;
 
-  const response = await openai.chat.completions.create({
-    model: "deepseek-chat",
-    messages: [{ role: "user", content: prompt }],
-    temperature: 0.7,
-    max_tokens: 500,
-  });
-
-  return response.choices[0].message.content || "Unable to generate summary";
+    const result = await model.generateContent(prompt);
+    const response = await result.response;
+    return response.text() || "Unable to generate summary";
+  } catch (error: any) {
+    console.error("Error generating summary:", error);
+    throw new Error(`Failed to generate summary: ${error.message}`);
+  }
 }
