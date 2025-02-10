@@ -1,7 +1,7 @@
 import os
 from openai import OpenAI
 
-# Use gpt-3.5-turbo for better availability
+# Use gpt-3.5-turbo for better availability and reliability
 MODEL = "gpt-3.5-turbo"
 
 client = OpenAI(api_key=os.getenv('OPENAI_API_KEY'))
